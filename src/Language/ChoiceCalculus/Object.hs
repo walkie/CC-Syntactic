@@ -30,11 +30,11 @@ none = inj None
 
 -- | List.
 data List a t where
-  Cons :: a -> List a (List a t :-> Full (List a t))
+  Cons :: List a (a :-> List a t :-> Full (List a t))
   Nil  :: List a (Full (List a t))
 
-cons :: (List a :<: l) => a -> ASTF l (List a t) -> ASTF l (List a t)
-cons h t = inj (Cons h) :$ t
+cons :: (List a :<: l) => ASTF l a -> ASTF l (List a t) -> ASTF l (List a t)
+cons h t = inj Cons :$ h :$ t
 
 nil :: (List a :<: l) => ASTF l (List a t)
 nil = inj Nil
