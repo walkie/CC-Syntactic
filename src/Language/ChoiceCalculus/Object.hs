@@ -73,4 +73,4 @@ node :: (Tree a :<: l) => ASTF l a -> ASTF l (List (Tree a t) t) -> ASTF l (Tree
 node = appSym Node
 
 instance Render (Tree a) where
-  renderArgs [a,c] Node = "Node " ++ a ++ " " ++ c
+  renderArgs [a,c] Node = "(Node " ++ a ++ " " ++ c ++ ")"
