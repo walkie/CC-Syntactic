@@ -1,0 +1,23 @@
+name:          ChoiceCalculus
+version:       0.0.0
+synopsis:      A simple and extensible representation of variation.
+homepage:      https://github.com/walkie/CC-Syntactic
+bug-reports:   https://github.com/walkie/CC-Syntactic/issues
+license:       BSD3
+license-file:  LICENSE
+author:        Eric Walkingshaw
+maintainer:    eric@walkingshaw.net
+category:      Language
+build-type:    Simple
+cabal-version: >= 1.10
+
+source-repository head
+  type:     git
+  location: https://github.com/walkie/CC-Syntactic.git
+  branch:   master
+
+library
+  default-language: Haskell2010
+  exposed-modules:  Language.ChoiceCalculus.Core.Syntax
+  build-depends:    base >= 4.6, syntactic >= 1.8
+  hs-source-dirs:   src
