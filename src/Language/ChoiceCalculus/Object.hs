@@ -16,12 +16,15 @@ import Language.Syntactic hiding (Nil)
 
 
 -- | An atomic plain value.
-data One t where
-  One :: a -> One (Full a)
+data One a t where
+  One :: a -> One a (Full a)
 
 -- Construct a One AST node.
-one :: (One :<: l) => a -> ASTF l a
+one :: (One a :<: l) => a -> ASTF l a
 one = inj . One
+
+instance Show a => Render (One a) where
+  render (One a) = show a
 
 
 -- | An empty/unit value.
@@ -33,9 +36,12 @@ none :: (None :<: l) => ASTF l a
 none = inj None
 
 -- | Construct an AST node from a Maybe value.
-fromMaybe :: (One :<: l, None :<: l) => Maybe a -> ASTF l a
+fromMaybe :: (One a :<: l, None :<: l) => Maybe a -> ASTF l a
 fromMaybe (Just a) = one a
 fromMaybe Nothing  = none
+
+instance Render None where
+  render None = "●"
 
 
 -- * Basic recursive data types
@@ -53,6 +59,10 @@ cons = appSym Cons
 nil :: (List a :<: l) => ASTF l (List a t)
 nil = inj Nil
 
+instance Render (List a) where
+  renderArgs [h,t] Cons = h ++ ":" ++ t
+  renderArgs []    Nil  = "[]"
+
 
 -- | A generic rose tree.
 data Tree a t where
@@ -61,3 +71,6 @@ data Tree a t where
 -- | Construct a Node AST node.
 node :: (Tree a :<: l) => ASTF l a -> ASTF l (List (Tree a t) t) -> ASTF l (Tree a t)
 node = appSym Node
+
+instance Render (Tree a) where
+  renderArgs [a,c] Node = "Node " ++ a ++ " " ++ c
