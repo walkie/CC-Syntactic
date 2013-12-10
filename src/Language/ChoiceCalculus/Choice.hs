@@ -8,6 +8,8 @@
 
 module Language.ChoiceCalculus.Choice where
 
+import Data.Set (Set)
+import qualified Data.Set as Set
 import Language.Syntactic hiding (Nil)
 
 import Language.ChoiceCalculus.Object
@@ -21,11 +23,11 @@ data Chc2 t where
 chc2 :: (Chc2 :<: l) => Dim -> ASTF l a -> ASTF l a -> ASTF l a
 chc2 d a b = inj (Chc2 d) :$ a :$ b
 
-freeDims :: (Chc2 :<: l) => AST l a -> [Dim]
-freeDims (s :$ a) = freeDims s ++ freeDims a
+freeDims :: (Chc2 :<: l) => AST l a -> Set Dim
+freeDims (s :$ a) = Set.union (freeDims s) (freeDims a)
 freeDims (Sym s)
-  | Just (Chc2 d) <- prj s = [d]
-  | otherwise              = []
+  | Just (Chc2 d) <- prj s = Set.singleton d
+  | otherwise              = Set.empty
 
 type V a = ASTF (Chc2 :+: One) a
 
