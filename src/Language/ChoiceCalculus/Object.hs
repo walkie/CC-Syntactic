@@ -13,7 +13,7 @@ import Language.Syntactic hiding (Nil)
 
 
 -- | A single plain value.
-data One l where
+data One t where
   One :: a -> One (Full a)
 
 one :: (One :<: l) => a -> ASTF l a
@@ -21,7 +21,7 @@ one = inj . One
 
 
 -- | No value.
-data None l where
+data None t where
   None :: None (Full a)
 
 none :: (None :<: l) => ASTF l a
@@ -29,13 +29,15 @@ none = inj None
 
 
 -- | List.
-data List a l where
-  Cons :: a -> List a (List a :-> Full (List a))
-  Nil  :: List (Full (List a))
+data List a t where
+  Cons :: a -> List a (List a t :-> Full (List a t))
+  Nil  :: List a (Full (List a t))
 
-cons :: (List :<: l) => e -> ASTF l (List a) -> ASTF l (List a)
-cons e t = inj (Cons e) :$ t
+cons :: (List a :<: l) => a -> ASTF l (List a t) -> ASTF l (List a t)
+cons h t = inj (Cons h) :$ t
 
+nil :: (List a :<: l) => ASTF l (List a t)
+nil = inj Nil
 
 -- | A generic rose tree representation.
 --data Tree2 a where
