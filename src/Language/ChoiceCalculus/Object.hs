@@ -34,7 +34,7 @@ data List a t where
   Nil  :: List a (Full (List a t))
 
 cons :: (List a :<: l) => ASTF l a -> ASTF l (List a t) -> ASTF l (List a t)
-cons h t = inj Cons :$ h :$ t
+cons = appSym Cons
 
 nil :: (List a :<: l) => ASTF l (List a t)
 nil = inj Nil
@@ -45,4 +45,4 @@ data Tree a t where
   Node :: Tree a (a :-> List (Tree a t) t :-> Full (Tree a t))
 
 node :: (Tree a :<: l) => ASTF l a -> ASTF l (List (Tree a t) t) -> ASTF l (Tree a t)
-node a l = inj Node :$ a :$ l
+node = appSym Node
