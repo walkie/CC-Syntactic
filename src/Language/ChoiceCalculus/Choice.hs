@@ -17,6 +17,7 @@ import Language.ChoiceCalculus.Object
 
 -- | Dimension names.
 type Dim = String
+type Tag = Bool
 
 -- | Generic binary choices.
 data Chc2 t where
@@ -29,7 +30,15 @@ chc2 d a b = inj (Chc2 d) :$ a :$ b
 instance Render Chc2 where
   renderArgs [l,r] (Chc2 d) = d ++ "‹" ++ l ++ "," ++ r ++ "›"
 
+-- | Apply a selection to an AST.
+select :: (Chc2 :<: l) => Dim -> Tag -> AST l a -> AST l a
+select d t (s :$ l :$ r)
+  | Just (Chc2 d') <- prj s
+  , d == d'         = if t then l else r
+select d t (s :$ a) = select d t s :$ select d t a
+select d t (Sym s)  = Sym s
 
+-- | The set of free dimensions in the AST.
 freeDims :: (Chc2 :<: l) => AST l a -> Set Dim
 freeDims (s :$ a) = Set.union (freeDims s) (freeDims a)
 freeDims (Sym s)
