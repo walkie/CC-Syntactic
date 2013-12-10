@@ -1,12 +1,21 @@
+{-# LANGUAGE
+      FlexibleContexts,
+      GADTs,
+      PatternGuards,
+      RankNTypes,
+      TypeOperators
+  #-}
 
 module Language.ChoiceCalculus.Choice where
 
 import Language.Syntactic hiding (Nil)
 
+import Language.ChoiceCalculus.Object
+
 type Dim = String
 
 -- | Binary choices
-data Chc2 l where
+data Chc2 t where
   Chc2 :: Dim -> Chc2 (a :-> a :-> Full a)
 
 chc2 :: (Chc2 :<: l) => Dim -> ASTF l a -> ASTF l a -> ASTF l a
