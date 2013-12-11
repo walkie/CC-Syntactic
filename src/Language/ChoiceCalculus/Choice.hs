@@ -135,6 +135,14 @@ instance Show Formula where
 --   configuration, otherwise its right alternative.
 type ChcF = Chc2 Formula
 
+-- | Construct a formula choice AST node.
+chcF :: (ChcF :<: l) => Formula -> ASTF l a -> ASTF l a -> ASTF l a
+chcF = chc2
+
+-- | Specialized project function for formula choices.
+prjChcF :: Project ChcF l => l a -> Maybe (ChcF a)
+prjChcF = prj
+
 -- | Configure an expression with formula choices by providing a list
 --   of selected tags. Omitted tags are implicitly deselected.
 configureF :: (ChcF :<: l) => [Tag] -> AST l a -> AST l a
