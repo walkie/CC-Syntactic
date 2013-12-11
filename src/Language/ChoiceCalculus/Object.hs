@@ -19,7 +19,7 @@ import Language.Syntactic hiding (Nil)
 data One a t where
   One :: a -> One a (Full a)
 
--- Construct a One AST node.
+-- | Construct a One AST node.
 one :: (One a :<: l) => a -> ASTF l a
 one = inj . One
 

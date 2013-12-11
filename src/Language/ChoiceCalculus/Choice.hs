@@ -52,14 +52,14 @@ chcT = chc2
 prjChcT :: Project ChcT l => l a -> Maybe (ChcT a)
 prjChcT = prj
 
--- | The set of tags referred to in the AST.
+-- | The set of atomic tags referred to in the AST.
 tags :: (ChcT :<: l) => AST l a -> Set Tag
 tags (s :$ a) = Set.union (tags s) (tags a)
 tags (Sym s)
   | Just (Chc2 d) <- prjChcT s = Set.singleton d
   | otherwise                  = Set.empty
 
--- | Select or deselect a particular tag.
+-- | Select or deselect a particular atomic tag.
 chooseT :: (ChcT :<: l) => Bool -> Tag -> AST l a -> AST l a
 chooseT b t (s :$ l :$ r)
   | Just (Chc2 t') <- prjChcT s
@@ -67,8 +67,14 @@ chooseT b t (s :$ l :$ r)
 chooseT b t (s :$ a) = chooseT b t s :$ chooseT b t a
 chooseT _ _ (Sym s)  = Sym s
 
-selectT, deselectT :: (ChcT :<: l) => Tag -> AST l a -> AST l a
+-- | Select an atomic tag by replacing all its corresponding choices by
+--   their left alternatives.
+selectT :: (ChcT :<: l) => Tag -> AST l a -> AST l a
 selectT   = chooseT True
+
+-- | Deselect an atomic tag by replacing all its corresponding choices by
+--   their right alternatives.
+deselectT :: (ChcT :<: l) => Tag -> AST l a -> AST l a
 deselectT = chooseT False
 
 -- ** Formula tags
@@ -89,7 +95,6 @@ instance Show Formula where
       paren (FTag t) = t
       paren (FNot f) = "¬" ++ paren f
       paren f        = "(" ++ show f ++ ")"
-
 
 -- | A formula choice is associated with a boolean tag formula.
 --   Resolves to its left alternative if its formula is satisfied by the
