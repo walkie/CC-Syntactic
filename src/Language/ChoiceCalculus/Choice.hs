@@ -34,11 +34,28 @@ prjChc2 _ = prj
 instance Show t => Render (Chc2 t) where
   renderArgs [l,r] (Chc2 t) = show t ++ "‹" ++ l ++ "," ++ r ++ "›"
 
+-- | A configuration maps generic tags to a boolean value indicating whether
+--   to choose the left (@True@) or right (@False@) alternative.
+type Config t = t -> Bool
+
+-- | Apply a configuration to an expression, eliminating all choices.
+configure :: (Chc2 t :<: l) => Config t -> AST l a -> AST l a
+configure c (s :$ l :$ r)
+    | Just (Chc2 t) <- prjChc2 (dom c) s = if c t then l else r
+  where dom :: Config t -> t
+        dom = undefined
+configure c (s :$ a) = configure c s :$ configure c a
+configure _ (Sym s)  = Sym s
+
 
 -- ** Atomic tags
 
 -- | An atomic tag, which may be either included or not in a configuration.
 type Tag = String
+
+-- | Produce a configuration from a list of selected tags.
+configT :: [Tag] -> Config Tag
+configT = flip elem
 
 -- | A tagged binary choice. Resolves to its left alternative if its tag is
 --   selected, otherwise its right alternative.
@@ -77,6 +94,12 @@ selectT   = chooseT True
 deselectT :: (ChcT :<: l) => Tag -> AST l a -> AST l a
 deselectT = chooseT False
 
+-- | Configure an expression with tagged binary choices by providing a list
+--   of selected tags. Omitted tags are implicitly deselected.
+configureT :: (ChcT :<: l) => [Tag] -> AST l a -> AST l a
+configureT = configure . configT
+
+
 -- ** Formula tags
 
 -- | Boolean tag formulas.
@@ -85,6 +108,17 @@ data Formula = FTag Tag
              | FAnd Formula Formula
              | FOr  Formula Formula
   deriving Eq
+
+-- | Determine whether a formula is satisfied by a particular tag configuration.
+satisfied :: Config Tag -> Config Formula
+satisfied c (FTag t) = c t
+satisfied c (FNot f) = not (satisfied c f)
+satisfied c (FAnd l r) = satisfied c l && satisfied c r
+satisfied c (FOr  l r) = satisfied c l || satisfied c r
+
+-- | Produce a formula configuration from a list of selected tags.
+configF :: [Tag] -> Config Formula
+configF = satisfied . configT
 
 instance Show Formula where
   show f = case f of
@@ -100,6 +134,11 @@ instance Show Formula where
 --   Resolves to its left alternative if its formula is satisfied by the
 --   configuration, otherwise its right alternative.
 type ChcF = Chc2 Formula
+
+-- | Configure an expression with formula choices by providing a list
+--   of selected tags. Omitted tags are implicitly deselected.
+configureF :: (ChcF :<: l) => [Tag] -> AST l a -> AST l a
+configureF = configure . configF
 
 
 -- * Examples
