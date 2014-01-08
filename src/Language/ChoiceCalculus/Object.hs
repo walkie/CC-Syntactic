@@ -59,6 +59,10 @@ cons = appSym Cons
 nil :: (List a :<: l) => ASTF l (List a t)
 nil = inj Nil
 
+-- | Build a List AST from a Haskell list of ASTs.
+fromList :: (List a :<: l) => [ASTF l a] -> ASTF l (List a t)
+fromList = foldr cons nil
+
 instance Render (List a) where
   renderArgs [h,t] Cons = h ++ ":" ++ t
   renderArgs []    Nil  = "[]"
