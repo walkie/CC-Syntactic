@@ -14,7 +14,7 @@ import qualified Data.Set as Set
 import Language.Syntactic hiding (Nil)
 
 import CC.Atomic
-import CC.Object
+import CC.Data
 
 
 -- * Generic binary choices

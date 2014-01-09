@@ -6,15 +6,15 @@
       TypeOperators
   #-}
 
--- | Generic object language encodings.
-module CC.Object where
+-- | Syntactic constructs for some basic recursive data types.
+module CC.Data where
 
 import Language.Syntactic hiding (Nil)
 
 
--- * Basic recursive data types
+-- * Lists
 
--- | List.
+-- | Abstract syntax of lists.
 data List a t where
   Cons :: List a (a :-> List a t :-> Full (List a t))
   Nil  :: List a (Full (List a t))
@@ -38,7 +38,9 @@ instance Render (List a) where
   renderArgs []    Nil  = "[]"
 
 
--- | A generic rose tree.
+-- * Trees
+
+-- | Abstract syntax of generic rose trees.
 data Tree a t where
   Node :: Tree a (a :-> List (Tree a t) t :-> Full (Tree a t))
 
