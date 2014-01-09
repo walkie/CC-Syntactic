@@ -7,41 +7,9 @@
   #-}
 
 -- | Generic object language encodings.
-module Language.Syntactic.Object where
+module CC.Object where
 
 import Language.Syntactic hiding (Nil)
-
-
--- * Atomic values
-
-
--- | An atomic plain value.
-data One a t where
-  One :: a -> One a (Full a)
-
--- | Construct a One AST node.
-one :: (One a :<: l) => a -> ASTF l a
-one = inj . One
-
-instance Show a => Render (One a) where
-  renderSym (One a) = show a
-
-
--- | An empty/unit value.
-data None t where
-  None :: None (Full a)
-
--- | Construct a None AST node.
-none :: (None :<: l) => ASTF l a
-none = inj None
-
--- | Construct an AST node from a Maybe value.
-fromMaybe :: (One a :<: l, None :<: l) => Maybe a -> ASTF l a
-fromMaybe (Just a) = one a
-fromMaybe Nothing  = none
-
-instance Render None where
-  renderSym None = "●"
 
 
 -- * Basic recursive data types

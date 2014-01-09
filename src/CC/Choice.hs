@@ -7,13 +7,14 @@
   #-}
 
 -- | Various representations of localized variation points, i.e. choices.
-module Language.Syntactic.CC.Choice where
+module CC.Choice where
 
 import Data.Set (Set)
 import qualified Data.Set as Set
 import Language.Syntactic hiding (Nil)
 
-import Language.Syntactic.Object
+import CC.Atomic
+import CC.Object
 
 
 -- * Generic binary choices
