@@ -76,5 +76,9 @@ data Tree a t where
 node :: (Tree a :<: l) => ASTF l a -> ASTF l (List (Tree a t) t) -> ASTF l (Tree a t)
 node = appSym Node
 
+-- | Construct a Node AST node from a value and a list of subexpressions.
+node' :: (Tree a :<: l) => ASTF l a -> [ASTF l (Tree a t)] -> ASTF l (Tree a t)
+node' a l = appSym Node a (fromList l)
+
 instance Render (Tree a) where
   renderArgs [a,c] Node = "(Node " ++ a ++ " " ++ c ++ ")"
