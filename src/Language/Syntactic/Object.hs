@@ -24,7 +24,7 @@ one :: (One a :<: l) => a -> ASTF l a
 one = inj . One
 
 instance Show a => Render (One a) where
-  render (One a) = show a
+  renderSym (One a) = show a
 
 
 -- | An empty/unit value.
@@ -41,7 +41,7 @@ fromMaybe (Just a) = one a
 fromMaybe Nothing  = none
 
 instance Render None where
-  render None = "●"
+  renderSym None = "●"
 
 
 -- * Basic recursive data types

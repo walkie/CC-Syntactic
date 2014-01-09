@@ -32,6 +32,7 @@ prjChc2 :: Project (Chc2 t) l => t -> l a -> Maybe (Chc2 t a)
 prjChc2 _ = prj 
 
 instance Show t => Render (Chc2 t) where
+  renderSym _ = "Chc2"
   renderArgs [l,r] (Chc2 t) = show t ++ "‹" ++ l ++ "," ++ r ++ "›"
 
 -- | A configuration maps generic tags to a boolean value indicating whether
