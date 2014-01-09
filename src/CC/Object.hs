@@ -64,6 +64,8 @@ fromList :: (List a :<: l) => [ASTF l a] -> ASTF l (List a t)
 fromList = foldr cons nil
 
 instance Render (List a) where
+  renderSym Cons = "(:)"
+  renderSym Nil  = "[]"
   renderArgs [h,t] Cons = h ++ ":" ++ t
   renderArgs []    Nil  = "[]"
 
@@ -81,4 +83,4 @@ node = appSym Node
 -- node' a l = appSym Node a (fromList l)
 
 instance Render (Tree a) where
-  renderArgs [a,c] Node = "(Node " ++ a ++ " " ++ c ++ ")"
+  renderSym _ = "Node"
