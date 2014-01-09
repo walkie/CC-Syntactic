@@ -1,10 +1,3 @@
-{-# LANGUAGE
-      FlexibleContexts,
-      GADTs,
-      PatternGuards,
-      RankNTypes,
-      TypeOperators
-  #-}
 
 -- | Various representations of localized variation points, i.e. choices.
 module CC.Choice where

@@ -1,10 +1,3 @@
-{-# LANGUAGE
-      FlexibleContexts,
-      GADTs,
-      PatternGuards,
-      RankNTypes,
-      TypeOperators
-  #-}
 
 -- | Syntactic constructs for some basic recursive data types.
 module CC.Data where

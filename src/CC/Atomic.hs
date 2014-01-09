@@ -1,8 +1,3 @@
-{-# LANGUAGE
-      FlexibleContexts,
-      GADTs,
-      TypeOperators
-  #-}
 
 -- | Syntactic constructs for basic atomic values.
 module CC.Atomic where
