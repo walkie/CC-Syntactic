@@ -18,7 +18,7 @@ source-repository head
 
 library
   default-language: Haskell2010
-  exposed-modules:  Language.ChoiceCalculus.Choice,
-                    Language.ChoiceCalculus.Object
+  exposed-modules:  Language.Syntactic.CC.Choice,
+                    Language.Syntactic.Object
   build-depends:    base >= 4.6, containers >= 0.5, syntactic >= 1.8
   hs-source-dirs:   src

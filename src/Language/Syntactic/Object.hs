@@ -7,7 +7,7 @@
   #-}
 
 -- | Generic object language encodings.
-module Language.ChoiceCalculus.Object where
+module Language.Syntactic.Object where
 
 import Language.Syntactic hiding (Nil)
 
