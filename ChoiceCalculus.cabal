@@ -31,5 +31,6 @@ library
     TypeOperators
   exposed-modules:
     CC.Atomic,
-    CC.Choice,
+    CC.BinaryChoice,
+    CC.FormulaChoice,
     CC.Data
